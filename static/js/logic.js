@@ -1,3 +1,4 @@
+// Data for earthquake in the past 7 days
 var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
 
 // perform a GET request to the URL
@@ -60,16 +61,32 @@ function createMap(earthquakes){
     // Set up the legend
     
     // Define streetmap and darkmap layers
-    var streetmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    var grayscaleMap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
         attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-        maxZoom: 10,
-        id: "mapbox/streets-v11",
+        maxZoom: 18,
+        id: "mapbox/light-v10",
         accessToken: API_KEY
     });
 
+    var outdoorMap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+        maxZoom: 18,
+        id: "mapbox/outdoors-v11",
+        accessToken: API_KEY
+    });
+    var satelliteMap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+        maxZoom: 18,
+        id: "mapbox/satellite-v9",
+        accessToken: API_KEY
+    });
+    
+
     // Define a baseMaps object to hold our base layers
     var baseMaps = {
-        "Street Map": streetmap
+        "Gray Scale": grayscaleMap,
+        "Satellite":satelliteMap,
+        "Outdoors":outdoorMap
     };
 
     // Create overlay object to hold our overlay layer
@@ -81,7 +98,7 @@ function createMap(earthquakes){
     var myMap = L.map("map", {
         center: [37.09, -95.71],
         zoom: 5,
-        layers: [streetmap, earthquakes]
+        layers: [grayscaleMap, earthquakes]
     });
 
     // Create a layer control
@@ -119,5 +136,3 @@ function createMap(earthquakes){
 
     legend.addTo(myMap); 
 };
-
-
